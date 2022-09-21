@@ -25,7 +25,7 @@ const Sidebar = () => {
         {showSidebar ? <ImCancelCircle /> : <AiOutlineMenu />}
       </div>
       {showSidebar && (
-        <div className='xl:w-[400px] w-20 flex flex-col justify-start mb-10 border-r-2 border-gray-100 xl:border-0 p-3'>
+        <div className='xl:w-[400px] w-20 md:w-[200px] flex flex-col justify-start mb-10 border-r-2 border-gray-100 xl:border-0 p-3'>
           <div className='xl:border-b-2 border-gray-200 xl:pb-4'>
             <Link href='/'>
               <div className={normalLink}>
@@ -58,10 +58,10 @@ const Sidebar = () => {
               </div>
             </div>
           )}
+          <Discover />
+          <SuggestedAccounts />
         </div>
       )}
-      <Discover />
-      <SuggestedAccounts />
       <Footer />
     </div>
   );
