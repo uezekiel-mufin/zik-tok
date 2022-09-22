@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import axios from "axios";
@@ -13,6 +13,11 @@ const UploadScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [videoAsset, setVideoAsset] = useState<SanityAssetDocument>();
   const [wrongFileType, setWrongFileType] = useState(false);
+  const [caption, setCaption] = useState("");
+  const [category, setCategory] = useState(topics[0].name);
+  const [savingPost, setSavingPost] = useState(false);
+  const { userProfile }: any = useAuthStore();
+  const router = useRouter();
 
   const handleUpload = (e: any) => {
     setIsLoading(true);
@@ -38,6 +43,33 @@ const UploadScreen = () => {
       });
 
     console.log("upoloaded successfully");
+  };
+
+  const handleFileUpload = async () => {
+    if (category && caption && videoAsset) {
+      console.log(category, caption, videoAsset);
+
+      const document = {
+        _type: "post",
+        caption,
+        video: {
+          _type: "file",
+          asset: {
+            _type: "reference",
+            _ref: videoAsset?._id,
+          },
+        },
+        userId: userProfile?._id,
+        postedBy: {
+          _type: "postedBy",
+          _ref: userProfile?._id,
+        },
+        topic: category,
+      };
+      await axios.post("http://localhost:3000/api/post", document);
+
+      router.push("/");
+    }
   };
   return (
     <div className='flex w-full  justify-center py-12 items-center'>
@@ -106,14 +138,20 @@ const UploadScreen = () => {
             <div className='mt-8'>
               <div className='flex flex-col gap-1 mb-2 capitalize font-semibold '>
                 <label htmlFor=''>caption</label>
-                <input type='text' className='border p-1 rounded-sm' />
+                <input
+                  type='text'
+                  className='border p-1 rounded-sm font-light'
+                  onChange={(e) => setCaption(e.target.value)}
+                />
               </div>
               <div className='flex flex-col gap-1 mb-2 capitalize font-semibold '>
                 <label htmlFor=''>choose a topic</label>
                 <select
                   name=''
+                  value={category}
                   id=''
                   className='border p-2 font-light text-sm capitalize  '
+                  onChange={(e) => setCategory(e.target.value)}
                 >
                   {topics.map((item) => (
                     <option key={item.name}>{item.name}</option>
@@ -124,7 +162,10 @@ const UploadScreen = () => {
                 <button className='border p-1 rounded-md text-sm transition-all duration-300 ease-linear hover:scale-110 px-4'>
                   Discard
                 </button>
-                <button className='border p-1 rounded-md text-sm transition-all duration-300 ease-linear hover:scale-110 px-4 bg-[#F51997] text-white'>
+                <button
+                  onClick={handleFileUpload}
+                  className='border p-1 rounded-md text-sm transition-all duration-300 ease-linear hover:scale-110 px-4 bg-[#F51997] text-white'
+                >
                   Post
                 </button>
               </div>

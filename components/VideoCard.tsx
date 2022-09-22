@@ -47,14 +47,14 @@ const VideoCard = ({ post }: singleVideoProps) => {
       </div>
       <div className='lg:ml-20 flex gap-4 relative'>
         <div className='rounded-3xl px-8'>
-          <Link href='/'>
+          <Link href={`/details/${post._id}`}>
             <video
               src={post.video.asset.url}
               controls={videoButton}
               onMouseOver={() => setVideoButton(true)}
               onMouseLeave={() => setVideoButton(false)}
               className='w-full  max-h-[530px] rounded-2xl cursor-pointer bg-gray-100 transition-all duration-300 ease-linear'
-            ></video>
+            />
           </Link>
         </div>
       </div>

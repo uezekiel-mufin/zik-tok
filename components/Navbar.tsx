@@ -11,7 +11,7 @@ import { createOrGetUser } from "../utils";
 import useAuthStore from "../store/authStore";
 
 const Navbar = () => {
-  const { addUser, userProfile, removeUser } = useAuthStore();
+  const { addUser, userProfile, removeUser }: any = useAuthStore();
   console.log(userProfile);
 
   return (
